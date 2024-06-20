@@ -24,6 +24,10 @@ img{
   max-width: 100%;
   height: auto;
 }
-main{
-  @apply p-10
+
+.published{
+  @apply text-green-500 bg-lime-100
+}
+.not-published{
+  @apply text-red-500 bg-rose-100
 }

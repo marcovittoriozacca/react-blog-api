@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import List from "./List";
 
 const Form = () => {
     const resetFormData = {
@@ -15,9 +14,6 @@ const Form = () => {
 
     // post object with setPost 
     const [post, setPost] = useState(resetFormData);
-
-    //posts list containing all of our posts with setPostsList
-    const [postsList, setPostsList] = useState([]);
 
     const [published, setPublished] = useState(false);
 
@@ -117,7 +113,7 @@ const Form = () => {
             <button type="submit" className="createBtn" onClick={createPost}>Create</button>
         </form>
 
-        <List posts={postsList} setPosts={setPostsList}/>
+        {/* <List posts={postsList} setPosts={setPostsList}/> */}
         
     </>)
 }
