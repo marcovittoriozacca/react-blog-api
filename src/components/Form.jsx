@@ -1,16 +1,46 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Form = () => {
+
+const [categories, setCategories] = useState([]);
+const  [tags, setTags] = useState([]);
+
+const getCategories = async () => {
+    const categoriesUrl = import.meta.env.VITE_SERVER_CATEGORIES;
+    try{
+        const response = await axios.get(`${categoriesUrl}`)
+        setCategories(response.data.categories)
+    }catch(err){
+        console.error(err);
+    }
+}
+
+const getTags = async () => {
+    const tagsUrl = import.meta.env.VITE_SERVER_TAGS;
+    try{
+        const response = await axios.get(`${tagsUrl}`)
+        setTags(response.data.tags)
+    }catch(err){
+        console.error(err);
+    }
+}
+
+useEffect(() => {
+    getCategories();
+    getTags();
+  }, []);
+
+
+
     const resetFormData = {
         title: '',
         content: '',
         image: '',
-        category: '',
+        categoryId: '',
         tags: [],
         published: false,
     }
-    const categories = ["Travel", "Food & Drink", "Technology", "Lifestyle", "Fitness & Health"];
-    const tags = ["Travel", "Food", "Technology", "Lifestyle", "Fitness", "Health", "DIY", "Fashion"];
 
     // post object with setPost 
     const [post, setPost] = useState(resetFormData);
@@ -25,12 +55,18 @@ const Form = () => {
     }
     
     //new post creation function with a super basic non bulletproof validation
-    const createPost = () => {
-        const {title, content, category, tags} = post;
-        if(!title || title.trim().length === 0 || !content || content.trim().length === 0 || !category || tags.length < 1){
+    const createPost = async () => {
+        const postsUrl = import.meta.env.VITE_SERVER_POSTS;
+        const {title, content, categoryId, tags} = post;
+        if(!title || title.trim().length === 0 || !content || content.trim().length === 0 || !categoryId || tags.length < 1){
             throw new Error("😔😔😔😔😔😔😔😔😔😔😔😔😔😔 Just do it properly 😔😔😔😔😔😔😔😔😔😔😔😔😔😔")
         }
-        setPostsList((posts) => [post, ...posts]);
+
+        const response = await axios.post(`${postsUrl}`, post, {headers: {
+            "Content-Type": "multipart/form-data"
+        }});
+        console.log(response);
+        // setPostsList((posts) => [post, ...posts]);
         setPost(resetFormData);
         setPublished(false);
     }
@@ -56,7 +92,7 @@ const Form = () => {
         }
         setPost((curr) => ({...curr, published: published}))
     }, [published])
-
+    
     return(<>
         <form className="formStyle" onSubmit={handleSubmit}>
             {/* title input field */}
@@ -75,31 +111,32 @@ const Form = () => {
                 {/* image input field */}
                 <div className="inputWrapper">
                     <label htmlFor="image" className="label">Image</label>
-                    <input type="text" id="image" name="image" value={post.image} onChange={handlePostElement} />
+                    
+                    <input type="file" name="image" id="image" onChange={(e) => setPost(curr => ({...curr, image: e.target.files[0]}))} />
                 </div>
 
                 {/* select category field */}
                 <div className="inputWrapper">
-                    <label htmlFor="category" className="label">Category</label>
-                    <select name="category" id="category" value={post.category} onChange={handlePostElement}>
-                        <option value="">Select a category...</option>
-                        {categories.map((cat, i) => (
-                            <option key={`category-${i}`} value={cat}>{cat}</option>
+                    <label htmlFor="categoryId" className="label">Category</label>
+                    <select name="categoryId" id="categoryId" value={post.categoryId} onChange={handlePostElement}>
+                        <option value="" disabled>Select a category...</option>
+                        {categories?.map((cat, i) => (
+                            <option key={`categoryId-${cat.id}`} value={cat.id}>{cat.name}</option>
                         ))}
                     </select>
                 </div>
             </div>
 
             {/* checkbox tags field */}
-            {tags.map( (tag,i) => (
-                <div key={`tags-${i}`} className="flex items-center gap-x-3">
-                    <label htmlFor={tag} className="label"> {tag} </label>
+            {tags?.map( (tag,i) => (
+                <div key={`tags-${tag.id}`} className="flex items-center gap-x-3">
+                    <label htmlFor={tag} className="label"> {tag.name} </label>
                     <input 
                         type="checkbox" 
                         name="tags" 
                         id={tag} 
-                        checked={post.tags.includes(tag)}
-                        onChange={() => handleCheckboxElements(tag)}
+                        checked={post.tags.includes(tag.id)}
+                        onChange={() => handleCheckboxElements(tag.id)}
                         />
                 </div>
             ) )}

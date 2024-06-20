@@ -14,9 +14,6 @@ function App() {
   //   }
   // }, []);
   
-  // const [currPage, setCurrPage] = useState(1);
-  // const [totalPages, setTotalPages] = useState(0);
-
   const [pageInfo, setPageInfo] = useState({
     currentPage: 1,
     totalPages: 0
@@ -26,9 +23,9 @@ function App() {
   //posts list containing all of our posts with setPostsList
   const [postsList, setPostsList] = useState([]);
 
-  const postsUrl = import.meta.env.VITE_SERVER_POSTS;
-
+  
   const getPosts = async () => {
+    const postsUrl = import.meta.env.VITE_SERVER_POSTS;
     try{
       const response = await axios.get(`${postsUrl}?page=${pageInfo.currentPage}&limit=10`);
       setPostsList(response.data.postsList);
@@ -38,7 +35,7 @@ function App() {
       console.error(err);
     }
   };
-  
+
   useEffect( () => {
     getPosts();
   }, [pageInfo.currentPage])
@@ -47,7 +44,7 @@ function App() {
 
     <>
     <main className={darkMode? "bg-black" : "bg-white"}>
-      {/* <Form/> */}
+      <Form/>
 
       <List
         postsList={postsList}

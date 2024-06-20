@@ -26,7 +26,7 @@ const prev = () => {
                             <p className={`${p.published? "published" : "not-published"} font-bold p-2 rounded-md`}>{p.published? "published" : "not published yet"}</p>
                             </div>
                             <figure className="w-[400px] overflow-hidden rounded-md">
-                                <img src={p.image? p.image : ""} alt={p.title} onError={addImageFallback}/>
+                                <img src={p.image? `${import.meta.env.VITE_SERVER_BASE_URL}${p.image}` : ""} alt={p.title} onError={addImageFallback}/>
                             </figure>
                             <p>{p.content}</p>
                             {/* <div className="flex items-center gap-x-3">
@@ -34,7 +34,7 @@ const prev = () => {
                                 <span className=" font-bold bg-neutral-300 p-3">{p.category}</span>
                             </div> */}
                         </div>
-                        <Delete index={i} handleDelete={postsList}/>
+                        {/* <Delete index={i} handleDelete={postsList}/> */}
                     </div>
 
                 </div>
