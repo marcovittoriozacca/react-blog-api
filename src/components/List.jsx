@@ -38,8 +38,8 @@ const handleDelete = async (slug) => {
                             </figure>
                             <p>{p.content}</p>
                             <div className="flex items-center gap-x-3">
-                                {p.tags.map(t => (<span key={`showPostTags-${t.id}`}>{t.name}</span>))} -
-                                <span className=" font-bold bg-neutral-300 p-3">{p.category.name}</span>
+                                {p.tags?.length > 0 && p.tags.map(t => (<span key={`showPostTags-${t.id}`}>{t.name}</span>))}
+                                {p.category?.name && <span className=" font-bold bg-neutral-300 p-3">{p.category?.name}</span>}
                             </div>
                         </div>
                         <Delete slug={p.slug} onDelete={(slug) => handleDelete(slug)}/>
