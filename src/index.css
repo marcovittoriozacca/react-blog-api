@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.formStyle{
+  @apply flex flex-col  gap-y-5 p-10 rounded-sm bg-neutral-200 w-min mx-auto;
+}
+
+.inputWrapper{
+  @apply mb-3 flex flex-col gap-y-1;
+}
+
+.createBtn{
+  @apply px-5 py-3 hover:bg-sky-400 bg-sky-500 rounded-sm text-white transition-transform hover:scale-105 duration-200 ease-out active:scale-100;
+}
+.label{
+  @apply font-bold;
+}
+input:not([type="checkbox"]), textarea{
+  @apply px-5 py-2 focus:outline-none rounded-sm;
+}
+
+img{
+  max-width: 100%;
+  height: auto;
+}
+main{
+  @apply p-10
+}
