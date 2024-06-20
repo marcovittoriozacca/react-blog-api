@@ -1,11 +1,19 @@
 import Delete from "./Delete";
+import Navigation from "./Navigation";
 import fallbackImg from '/meme.webp';
 
-const List = ({postsList}) => {
+const List = ({postsList, pageInfo, setPageInfo}) => {
 
-    const addImageFallback = (event) => {
-        event.currentTarget.src = fallbackImg;
-      };
+const addImageFallback = (event) => {
+    event.currentTarget.src = fallbackImg;
+};
+
+const next = () => {
+    setPageInfo(curr => ({...curr, currentPage: (curr.currentPage >= curr.totalPages? curr.totalPages : curr.currentPage + 1 )}))
+}
+const prev = () => {
+    setPageInfo(curr => ({...curr, currentPage: (curr.currentPage <= 1?  1 : curr.currentPage - 1 )}))
+}
 
     return(<>
         <section className=" bg-neutral-200 flex flex-col gap-y-5">
@@ -32,6 +40,12 @@ const List = ({postsList}) => {
                 </div>
             ))}
         </section>
+        <Navigation 
+            onNext={next}
+            onPrev={prev}
+        >
+            {pageInfo.currentPage}
+        </Navigation>
     </>)
 }
 export default List;

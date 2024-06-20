@@ -111,10 +111,7 @@ const Form = () => {
             </div>
 
             <button type="submit" className="createBtn" onClick={createPost}>Create</button>
-        </form>
-
-        {/* <List posts={postsList} setPosts={setPostsList}/> */}
-        
+        </form>        
     </>)
 }
 

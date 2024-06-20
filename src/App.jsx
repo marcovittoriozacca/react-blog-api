@@ -14,7 +14,13 @@ function App() {
   //   }
   // }, []);
   
-  const [currPage, setCurrPage] = useState(1);
+  // const [currPage, setCurrPage] = useState(1);
+  // const [totalPages, setTotalPages] = useState(0);
+
+  const [pageInfo, setPageInfo] = useState({
+    currentPage: 1,
+    totalPages: 0
+  })
   const [darkMode, setDarkMode] = useState(false);
   
   //posts list containing all of our posts with setPostsList
@@ -24,8 +30,10 @@ function App() {
 
   const getPosts = async () => {
     try{
-      const response = await axios.get(`${postsUrl}?page=${currPage}&limit=10`);
+      const response = await axios.get(`${postsUrl}?page=${pageInfo.currentPage}&limit=10`);
       setPostsList(response.data.postsList);
+      setPageInfo((curr) => ({...curr, totalPages: response.data.totalPages}));
+
     }catch(err){
       console.error(err);
     }
@@ -33,7 +41,7 @@ function App() {
   
   useEffect( () => {
     getPosts();
-  }, [currPage])
+  }, [pageInfo.currentPage])
 
   return (
 
@@ -43,6 +51,8 @@ function App() {
 
       <List
         postsList={postsList}
+        pageInfo={pageInfo}
+        setPageInfo={setPageInfo}
       />
     </main>
     </>
