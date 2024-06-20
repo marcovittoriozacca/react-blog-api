@@ -1,6 +1,7 @@
 import Delete from "./Delete";
 import Navigation from "./Navigation";
 import fallbackImg from '/meme.webp';
+import axios from "axios";
 
 const List = ({postsList, pageInfo, setPageInfo}) => {
 
@@ -13,6 +14,13 @@ const next = () => {
 }
 const prev = () => {
     setPageInfo(curr => ({...curr, currentPage: (curr.currentPage <= 1?  1 : curr.currentPage - 1 )}))
+}
+
+const handleDelete = async (slug) => {
+    const postsUrl = import.meta.env.VITE_SERVER_POSTS;
+
+    const response = await axios.delete(`${postsUrl}/${slug}`);
+    console.log(response);
 }
 
     return(<>
@@ -29,12 +37,12 @@ const prev = () => {
                                 <img src={p.image? `${import.meta.env.VITE_SERVER_BASE_URL}${p.image}` : ""} alt={p.title} onError={addImageFallback}/>
                             </figure>
                             <p>{p.content}</p>
-                            {/* <div className="flex items-center gap-x-3">
-                                {p.tags.map(t => (<span key={`showPostTags-${i}`}>{t}</span>))} -
-                                <span className=" font-bold bg-neutral-300 p-3">{p.category}</span>
-                            </div> */}
+                            <div className="flex items-center gap-x-3">
+                                {p.tags.map(t => (<span key={`showPostTags-${t.id}`}>{t.name}</span>))} -
+                                <span className=" font-bold bg-neutral-300 p-3">{p.category.name}</span>
+                            </div>
                         </div>
-                        {/* <Delete index={i} handleDelete={postsList}/> */}
+                        <Delete slug={p.slug} onDelete={(slug) => handleDelete(slug)}/>
                     </div>
 
                 </div>

@@ -31,3 +31,7 @@ img{
 .not-published{
   @apply text-red-500 bg-rose-100
 }
+
+main{
+  @apply pb-20
+}
